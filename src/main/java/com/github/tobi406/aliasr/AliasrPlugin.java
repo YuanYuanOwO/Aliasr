@@ -36,8 +36,8 @@ public class AliasrPlugin {
 
     List<String> registeredCommands = new ArrayList<>();
 
-    @Inject
     public AliasrPlugin(CommandManager commandManager, Logger logger, @DataDirectory final Path folder) {
+    @Inject
         this.commandManager = commandManager;
         this.logger = logger;
         this.folder = folder;
