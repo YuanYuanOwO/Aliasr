@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,12 +36,11 @@ public class AliasrPlugin {
     private Path folder;
 
     List<String> registeredCommands = new ArrayList<>();
-
-    public AliasrPlugin(CommandManager commandManager, Logger logger, @DataDirectory final Path folder) {
     @Inject
+    public AliasrPlugin(CommandManager commandManager, Logger logger, @DataDirectory final Path folder) {
         this.commandManager = commandManager;
         this.logger = logger;
-        this.folder = folder;
+        this.folder = folder != null ? folder : Paths.get("plugins/aliasr");
 
         this.config = this.loadConfig(folder);
 
@@ -50,6 +50,9 @@ public class AliasrPlugin {
         instance = this;
     }
     public static AliasrPlugin getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("AliasrPlugin has not been initialized!");
+        }
         return instance;
     }
 
@@ -82,6 +85,7 @@ public class AliasrPlugin {
         this.unregisterCommands();
         this.registerCommands();
     }
+
 
     public void registerCommands() {
         this.commandManager.register("aliasr", new AliasrCommand());
